@@ -1,0 +1,8 @@
+*.retry
+tests/test.sh
+.venv
+.tox
+molecule/**/__pycache__
+molecule/**/*.pyc
+molecule/**/*.log
+.idea
