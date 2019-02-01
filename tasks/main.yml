@@ -1,11 +1,32 @@
 ---
 
-- name: Install sudo
-  raw: test -e /usr/bin/sudo || (apt -y update && apt install -y sudo)
+- name: Get distribution
+  raw: . /etc/os-release && echo "$NAME-$VERSION"
   changed_when: false
+  register: distribution
 
--
-  name: Install python for Ansible
-  raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
-  become: true
-  changed_when: false
+- name: Print gathered distribution
+  debug: msg={{ distribution.stdout_lines }}
+
+- name: Prepare Debian / Ubuntu
+  when: |-
+    'Debian' in distribution.stdout
+    or 'Ubuntu' in distribution.stdout
+  block:
+    -
+      name: Install sudo if missing
+      raw: test -e /usr/bin/sudo || (apt -y update && apt install -y sudo)
+      changed_when: false
+    -
+      name: Install python if missing
+      raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+      changed_when: false
+
+- name: Prepare CentOS
+  when: |-
+    'CentOS' in distribution.stdout
+  block:
+    -
+      name: Install python if missing
+      raw: test -e /usr/bin/python || (yum install -y python2)
+      changed_when: false
