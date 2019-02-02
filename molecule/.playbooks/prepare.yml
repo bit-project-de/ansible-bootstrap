@@ -1,7 +1,9 @@
 ---
 
 - name: Prepare nothing
-  hosts: all
+  hosts: localhost
+  connection: local
+  gather_facts: false
   tasks:
     - name: Prepare nothing
-      raw: true
+      debug: msg="Prepare nothing"
