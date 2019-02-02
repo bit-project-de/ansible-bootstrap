@@ -1,1 +1,7 @@
 ---
+
+- name: Prepare nothing
+  hosts: all
+  tasks:
+    - name: Prepare nothing
+      raw: true

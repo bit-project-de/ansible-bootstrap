@@ -9,7 +9,7 @@ platforms:
   - name: ansible-bootstrap-ubuntu-18-04
     alias: ubuntu/bionic/amd64
     groups: [ "ansible-bootstrap" ]
-  - name: autoupdate-centos-7
+  - name: ansible-bootstrap-centos-7
     alias: centos/7/amd64
     groups: [ "ansible-bootstrap" ]
 provisioner:
