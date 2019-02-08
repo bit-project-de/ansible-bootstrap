@@ -3,7 +3,7 @@
 - name: Test if Python is installed
   raw: python -V  # execute Python
   register: python_version
-  changed_when: "'not found' in python_version.stderr"
+  changed_when: false
   failed_when: false
 
 - name: Install Python when not installed
@@ -30,7 +30,7 @@
     then
       emerge --ask n dev-lang/python-2
     fi
-  when: "'not found' in python_version.stderr"
+  when: "'not found' in python_version.stderr or 'not found' in python_version.stdout"
 
 - name: Gathering Facts
   setup:
