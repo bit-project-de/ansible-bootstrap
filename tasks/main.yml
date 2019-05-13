@@ -46,5 +46,10 @@
     name:
       - ca-certificates
       - curl
-      - sudo
     state: present
+
+- name: Install sudo
+  package:
+    name: sudo
+    state: present
+  when: ansible_os_family == 'Debian'
