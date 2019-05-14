@@ -2,7 +2,7 @@
 Prepares host for Ansible
 
 ## Requirements
-* Ansible >= 2.5
+* Ansible >= 2.7
 
 ## Role Variables
 No values for variables necessary.
