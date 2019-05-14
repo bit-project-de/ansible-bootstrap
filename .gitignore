@@ -2,6 +2,8 @@
 tests/test.sh
 .venv
 .tox
+.ara
+reports
 molecule/**/__pycache__
 molecule/**/*.pyc
 molecule/**/*.log

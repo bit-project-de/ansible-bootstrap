@@ -20,7 +20,7 @@ sudo pip install virtualenv
 ```
 virtualenv --no-site-packages .venv
 source .venv/bin/activate
-pip install tox
+pip install -r test-requirements.txt
 ```
 
 ## Tox Usage
