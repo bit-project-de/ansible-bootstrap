@@ -1,1 +1,3 @@
 ---
+
+ansible_bootstrap_with_sudo: true

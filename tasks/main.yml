@@ -52,4 +52,4 @@
   package:
     name: sudo
     state: present
-  when: ansible_os_family == 'Debian'
+  when: ansible_bootstrap_with_sudo | bool
