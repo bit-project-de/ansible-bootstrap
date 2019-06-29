@@ -38,7 +38,7 @@
 - name: Install equery on Gentoo based containers when not available
   raw: test -e /usr/bin/equery || emerge --ask n gentoolkit
   register: equery_status
-  changed_when: equery_status.stdout != ''
+  changed_when: equery_status.stdout | length > 0
   when: ansible_os_family == 'Gentoo'
 
 - name: Install some basic packages
