@@ -92,8 +92,9 @@ try {
 
       pipelineConfig = getPipelineConfig()
 
-      // prepare virtualenv
       dir(getRepoName()) {
+          sh 'python --version'
+          // prepare virtualenv
           venv('.venv', 'pip install tox')
       }
       stash(includes: getRepoName() + '/.venv/**/*', name: 'venv')
