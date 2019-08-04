@@ -3,8 +3,7 @@
 
 // https://jenkins.io/doc/book/pipeline/syntax/#available-options
 properties([
-  disableConcurrentBuilds(),
-  pipelineTriggers([pollSCM('H/15 * * * *')])
+  disableConcurrentBuilds()
 ])
 
 def getBranch(){
@@ -28,7 +27,7 @@ def prepareVenv(String name) {
   sh """
     virtualenv ${name}
     . ${name}/bin/activate
-    pip install tox
+    pip install -r test-requirements.txt
   """
 }
 
@@ -57,17 +56,23 @@ def configurePipeline(){
   switch(getBranch()){
     case 'master':
       properties([
-        buildDiscarder(logRotator(numToKeepStr: ''))
+        buildDiscarder(logRotator(numToKeepStr: '100')),
+        pipelineTriggers([
+            pollSCM('H/15 * * * *'),
+            cron('0 1 * * *') // run at 01:00:00
+        ])
       ])
       break
     case 'develop':
       properties([
-        buildDiscarder(logRotator(numToKeepStr: '20'))
+        buildDiscarder(logRotator(numToKeepStr: '20')),
+        pipelineTriggers([pollSCM('H/15 * * * *')])
       ])
       break
     default:
       properties([
-        buildDiscarder(logRotator(numToKeepStr: '5'))
+        buildDiscarder(logRotator(numToKeepStr: '5')),
+        pipelineTriggers([pollSCM('H/15 * * * *')])
       ])
   }
 }
@@ -77,8 +82,10 @@ def pipelineConfig
 try {
   stage('Prepare') {
     node('ansible') {
-      // clean up
+      // configure cleanup after running pipeline
       cleanWs()
+      // ensure we start at a clean workspace state
+      deleteDir()
       // checkout project git repository to sub directory
       checkout([
         $class: 'GitSCM',
@@ -87,17 +94,13 @@ try {
         extensions: scm.extensions << [$class: 'RelativeTargetDirectory', relativeTargetDir: getRepoName()],
         userRemoteConfigs: scm.userRemoteConfigs
       ])
+      // stash sourcecode
+      stash(includes: getRepoName() + '/**/*', name: 'sourcecode')
+
       // configure branch specific pipeline
       configurePipeline()
 
       pipelineConfig = getPipelineConfig()
-
-      dir(getRepoName()) {
-          sh 'python --version'
-          // prepare virtualenv
-          venv('.venv', 'pip install tox')
-      }
-      stash(includes: getRepoName() + '/.venv/**/*', name: 'venv')
     }
   }
   stage('Test') {
@@ -119,8 +122,11 @@ try {
 def runMoleculeTests(toxEnv, scenario) {
   return {
     node('ansible') {
+      // cleanup workspace on our node
+      deleteDir()
+      unstash('sourcecode')
+
       try {
-        unstash('venv')
         dir(getRepoName()) {
           sh "mkdir -p ./reports/${toxEnv}-${scenario}"
           withEnv(['PATH+EXTRA=/snap/bin:/var/lib/snapd/snap/bin']) {
@@ -130,14 +136,6 @@ def runMoleculeTests(toxEnv, scenario) {
       } catch(e){
         throw e
       } finally {
-        try {
-          dir(getRepoName()) {
-            venv('.venv', "tox --parallel--safe-build -e ${toxEnv} -- ara generate junit ./reports/${toxEnv}-${scenario}/junit.xml")
-          }
-          junit(getRepoName() + "/reports/${toxEnv}-${scenario}/junit.xml")
-        }catch(e){
-          echo "failed to get reports"
-        }
         try {
           dir(getRepoName()) {
             venv('.venv', "tox --parallel--safe-build -e ${toxEnv} -- ara generate html ./reports/${toxEnv}-${scenario}/html")
