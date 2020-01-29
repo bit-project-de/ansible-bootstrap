@@ -8,13 +8,16 @@ lint:
 platforms:
   - name: ansible-bootstrap-ubuntu-18-04-$TOX_ENVNAME
     alias: ubuntu/bionic/amd64
-    groups: [ "ansible-bootstrap" ]
+    groups: [ "ansible_bootstrap" ]
   - name: ansible-bootstrap-ubuntu-16-04-$TOX_ENVNAME
     alias: ubuntu/xenial/amd64
-    groups: [ "ansible-bootstrap" ]
+    groups: [ "ansible_bootstrap" ]
   - name: ansible-bootstrap-centos-7-$TOX_ENVNAME
     alias: centos/7/amd64
-    groups: [ "ansible-bootstrap" ]
+    groups: [ "ansible_bootstrap" ]
+  - name: ansible-bootstrap-centos-8-$TOX_ENVNAME
+    alias: centos/8/amd64
+    groups: [ "ansible_bootstrap" ]
 provisioner:
   name: ansible
   playbooks:
