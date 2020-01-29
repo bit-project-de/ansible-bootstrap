@@ -59,7 +59,7 @@ def configurePipeline(){
         buildDiscarder(logRotator(numToKeepStr: '100')),
         pipelineTriggers([
             pollSCM('H/15 * * * *'),
-            cron('0 1 * * *') // run at 01:00:00
+            cron('@daily')
         ])
       ])
       break
