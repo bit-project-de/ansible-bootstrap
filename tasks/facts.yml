@@ -47,6 +47,11 @@
     ansible_bootstrap_facts_os_name == "CentOS"
     and ansible_bootstrap_facts_os_version | version('8', '>=')
 
+- name: Force override ansible python interpreter
+  set_fact:
+    ansible_python_interpreter: /usr/bin/python{{ ansible_bootstrap_python_version }}
+  when: ansible_bootstrap_with_override_ansible_interpreter | bool
+
 - name: Test if Python is installed
   raw: |
     PYTHON_VERSION=$(python -V 2>&1)

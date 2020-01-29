@@ -2,3 +2,4 @@
 
 ansible_bootstrap_python_version: 2
 ansible_bootstrap_with_sudo: true
+ansible_bootstrap_with_override_ansible_interpreter: true
