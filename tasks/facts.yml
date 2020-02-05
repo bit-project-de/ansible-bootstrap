@@ -45,7 +45,7 @@
     ansible_bootstrap_python_version: 3
   when: >
     ansible_bootstrap_facts_os_name == "CentOS"
-    and ansible_bootstrap_facts_os_version | version('8', '>=')
+    and ansible_bootstrap_facts_os_version is version('8', '>=')
 
 - name: Force override ansible python interpreter
   set_fact:
