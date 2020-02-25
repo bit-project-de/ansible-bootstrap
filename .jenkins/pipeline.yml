@@ -5,6 +5,7 @@ tox_envs:
   - py36-ansible27
   - py27-ansible28
   - py36-ansible28
+  - py36-ansible29
 
 molecule_scenarios:
   - default
