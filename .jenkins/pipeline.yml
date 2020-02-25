@@ -2,8 +2,8 @@
 
 tox_envs:
   - py27-ansible27
-  - py36-ansible27
   - py27-ansible28
+  - py36-ansible27
   - py36-ansible28
   - py36-ansible29
 
