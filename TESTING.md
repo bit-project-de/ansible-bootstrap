@@ -44,12 +44,12 @@ tox -l
 
 Run tests in specific environment:
 ```
-tox -e py27-ansible27
+tox -e py36-ansible29
 ```
 
 Run custom command in specific environment:
 ```
-tox -e py27-ansible27 -- molecule converge
+tox -e py36-ansible29 -- molecule converge
 ```
 
 ## ARA Usage
@@ -60,5 +60,5 @@ playbook runs into a local sqlite database `.ara/ansible.sqlite`.
 
 After running the tests you can visualize the plays running the ARA webserver:
 ```
-tox -e  py27-ansible27 -- ara-manage runserver
+tox -e  py36-ansible29 -- ara-manage runserver
 ```
