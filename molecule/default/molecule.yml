@@ -6,6 +6,9 @@ driver:
 lint:
   name: yamllint
 platforms:
+  - name: ansible-bootstrap-ubuntu-20-04-$TOX_ENVNAME
+    alias: ubuntu/focal/amd64
+    groups: [ "ansible_bootstrap" ]
   - name: ansible-bootstrap-ubuntu-18-04-$TOX_ENVNAME
     alias: ubuntu/bionic/amd64
     groups: [ "ansible_bootstrap" ]
