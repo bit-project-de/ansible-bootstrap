@@ -68,6 +68,8 @@
       fi
     fi
     echo $PYTHON_VERSION
+  args:
+    executable: /bin/bash
   register: python_version
   changed_when: false
   failed_when: false
