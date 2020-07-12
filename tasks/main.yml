@@ -59,19 +59,37 @@
           emerge --ask n dev-lang/python-3
         fi
 
-- name: Gather minimal facts
-  setup:
-    gather_subset: min
-
 - name: Install some basic packages
-  package:
-    name:
-      - ca-certificates
-      - curl
-    state: present
+  block:
+    -
+      name: Install basic packages with apt
+      apt:
+        name:
+          - ca-certificates
+          - curl
+        state: present
+      when: ansible_bootstrap_facts_os_name == "Ubuntu"
+    -
+      name: Install basic packages with yum
+      yum:
+        name:
+          - ca-certificates
+          - curl
+        state: present
+      when: ansible_bootstrap_facts_os_name == "CentOS"
 
 - name: Install sudo
-  package:
-    name: sudo
-    state: present
   when: ansible_bootstrap_with_sudo | bool
+  block:
+    -
+      name: Install sudo with apt
+      apt:
+        name: sudo
+        state: present
+      when: ansible_bootstrap_facts_os_name == "Ubuntu"
+    -
+      name: Install sudo with yum
+      yum:
+        name: sudo
+        state: present
+      when: ansible_bootstrap_facts_os_name == "CentOS"
