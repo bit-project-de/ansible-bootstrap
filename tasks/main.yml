@@ -93,3 +93,7 @@
         name: sudo
         state: present
       when: ansible_bootstrap_facts_os_name == "CentOS"
+
+- name: Gather minimal facts
+  setup:
+    gather_subset: min
